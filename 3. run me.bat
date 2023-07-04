@@ -1,0 +1,1 @@
+cd (program) && python3 go.py & pause

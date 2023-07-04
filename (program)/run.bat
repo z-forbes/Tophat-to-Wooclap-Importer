@@ -1,0 +1,1 @@
+cd th_to_wc && node .
