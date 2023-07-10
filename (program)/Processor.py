@@ -203,6 +203,8 @@ class Processor:
         def line(tag):
             return "\n{},,".format(tag)
         
+        self.order()
+
         output = "tag,folder_name,q_count"
         for f_sf in self.get_folders():
             output += line(f_sf.tag)

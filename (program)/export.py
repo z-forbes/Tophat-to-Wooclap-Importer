@@ -35,3 +35,5 @@ try:
     rmtree("__pycache__")
 except:
     utils.warning("__pycache__ already deleted")
+
+input("Export complete.\nPress enter to exit.")

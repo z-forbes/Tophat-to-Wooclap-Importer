@@ -78,7 +78,9 @@ def dir_fnames(dirname):
 
 ### MESSAGES ###
 def exception(message):
-    raise Exception('\033[91m' + "{}\n".format(message) + '\033[0m')
+    print('\033[91m' + "\nError: {}\n".format(message) + '\033[0m')
+    input("Press enter to exit.")
+    raise Exception()
 
 def warning(message):
     print('\033[93m' + "{}".format(message) + '\033[0m')
