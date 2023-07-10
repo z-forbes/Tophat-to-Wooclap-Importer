@@ -1,6 +1,4 @@
-# Tophat to Wooclap Importer (Partial)
-
-This program is incomplete, as permission has not yet been granted to upload a large portion of it which was not written by me.
+# Tophat to Wooclap Importer
 
 This program allows for the Topat to Wooclap import process to be semi-automated. It runs on Windows. 
 The program contains files which cause destructive actions. As outlined in the [license](/LICENSE), I disclaim all liability.
