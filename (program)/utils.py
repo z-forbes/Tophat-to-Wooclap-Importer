@@ -69,12 +69,26 @@ def join_csvs(dirname, outname):
     return outname
 
 def write_csv(contents, fname):
+    # punctuation = r"""!"#$%&'()*+,-:;<=>?@\^`{|}~"""
+    # if any (p in fname for p in punctuation):
+    #     warning("Trying to write a file whose name contains punctuation. May cause unexpected behaviour.")
     with open(fname, 'w', newline='') as file:
         mywriter = csv.writer(file, delimiter=',')
         mywriter.writerows(contents)
 
 def dir_fnames(dirname):
     return [f for f in listdir(dirname) if isfile(join(dirname, f))]
+
+# i thought there were going to be more to replace lol
+def replace_invalid_chars(string):
+    # subs = {old:new}
+    subs = {":":"[colon]"}
+
+    for old, new in subs.items():
+        string = string.replace(old, new)
+    
+    return string
+    
 
 ### MESSAGES ###
 def exception(message):

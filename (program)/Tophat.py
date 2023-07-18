@@ -18,7 +18,7 @@ class Tophat:
                 return True
             if str=="FALSE" or str=="":
                 return False
-            raise Exception
+            raise Exception("String was: {}".format(str))
             
         f = open(fname, 'r')
         first = True
@@ -34,6 +34,19 @@ class Tophat:
         f.close()
 
     def mk_img_tol_miss(self, wc_qs, outname="img_tol_miss.csv"):
+        def order_output(output):
+            # changes None output of utils.get_value to 0 for ordering
+            def _get_value(tag, t):
+                r = utils.get_value(tag, t)
+                if r:
+                    return r 
+                else:
+                    return 0
+
+            output.sort(key=lambda l: _get_value(l[0], "Q")) 
+            output.sort(key=lambda l: _get_value(l[0], "S")) 
+            output.sort(key=lambda l: _get_value(l[0], "F")) 
+
         self.mk_missing(wc_qs)
         to_write = []
         for l in self.lines:
@@ -41,35 +54,35 @@ class Tophat:
             if True in img_tol_miss:
                 tag = utils.get_tag(l.wc_q)
                 to_write.append([tag] + img_tol_miss)
-        # to_write = self.order_populate(to_write)
+        order_output(to_write)
         headers = ["tag", "has image", "has tolerance", "missing"]
         contents = [headers] + to_write
         utils.write_csv(contents, outname)
         
-    # orders to_write based on tags. adds tags where they're missing
-    def order_populate(self, to_write):
-        def fs_match(t1, t2):
-            concat = t1+t2
-            output = True
-            if concat.count("S")==1:
-                return False
-            if concat.count("S")==2:
-                    output = output and (utils.get_value(t1, "S")==utils.get_value(t2, "S"))
-            return output and (utils.get_value(t1, "F")==utils.get_value(t2, "F"))
+    # # orders to_write based on tags. adds tags where they're missing
+    # def order_populate(self, to_write):
+    #     def fs_match(t1, t2):
+    #         concat = t1+t2
+    #         output = True
+    #         if concat.count("S")==1:
+    #             return False
+    #         if concat.count("S")==2:
+    #                 output = output and (utils.get_value(t1, "S")==utils.get_value(t2, "S"))
+    #         return output and (utils.get_value(t1, "F")==utils.get_value(t2, "F"))
         
-        if len(to_write)<=1:
-            return
+    #     if len(to_write)<=1:
+    #         return
         
-        to_write.sort(key = lambda x:x[0])
-        prev = to_write[0]
-        for cur in to_write[1:]:
-            if fs_match(prev[0], cur[0]):
-                new_qs = [utils.get_value(prev[0], "Q")+1, utils.get_value(cur[0], "Q")]
-                for nq in new_qs:
-                    new_tag = "F{}S{}Q{}".format(utils.get_value(prev[0], "F"), utils.get_value(prev[0], "S"), nq)
-                    to_write.append([new_tag, None, None, True])
-        to_write.sort(key = lambda x:x[0])
-        return to_write
+    #     to_write.sort(key = lambda x:x[0])
+    #     prev = to_write[0]
+    #     for cur in to_write[1:]:
+    #         if fs_match(prev[0], cur[0]):
+    #             new_qs = [utils.get_value(prev[0], "Q")+1, utils.get_value(cur[0], "Q")]
+    #             for nq in new_qs:
+    #                 new_tag = "F{}S{}Q{}".format(utils.get_value(prev[0], "F"), utils.get_value(prev[0], "S"), nq)
+    #                 to_write.append([new_tag, None, None, True])
+    #     to_write.sort(key = lambda x:x[0])
+    #     return to_write
     
 
     def mk_missing(self, wc):

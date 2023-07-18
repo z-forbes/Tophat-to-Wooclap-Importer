@@ -22,6 +22,9 @@ class Processor:
 
         # key: folder/subfolder tag, value: (f/sf name, f/sf count)
         self.names_counts = {}
+        self.nc_from_file = None
+        
+        self.course_code = ""
 
     ### NAMER ### 
     def get_names_counts(self, tag):
@@ -37,13 +40,16 @@ class Processor:
                 utils.warning("Name not unique.")
                 name = input("Name of {}: ".format(pretty_tag(tag)))
             
-            count = input("No. of items in {}: ".format(pretty_tag(tag)))
+            extra = ""
+            if not "S" in tag:
+                extra = ", excluding those within subfolder(s)"
+            count = input("No. of questions in {}{}: ".format(pretty_tag(tag), extra))
             while not count.isdigit():
                 utils.warning("Enter a number.")
-                count = input("No. of items in {}: ".format(pretty_tag(tag)))
+                count = input("No. of questions in {}{}: ".format(pretty_tag(tag), extra))
         
         full_name += name
-        return (full_name, int(count))
+        return (utils.replace_invalid_chars(full_name), int(count))
         
     def name_unique(self, name):
         return not (name in [nc[0] for nc in self.names_counts.values()])
@@ -55,18 +61,22 @@ class Processor:
         if not self.auto:
             self.order()
 
-        if self.is_nc_from_file():
+        self.nc_from_file = self.is_nc_from_file()
+        if self.nc_from_file:
             self.mk_nc_from_file()
         else:
             self.mk_nc_not_from_file()
 
         self.reset_output()
         self.mk_lines()
+        if not self.auto:
+            self.course_code = input("Enter the course code (or leave blank to skip): ")
         for f in self.folders:
             if len(f.subfolders)!=0:
                 for sf in f.subfolders:
                     self.run_helper([q.tag for q in sf.questions])
             if len(f.questions)!=0:
+                self.order()
                 self.run_helper([q.tag for q in f.questions])
         # self.lines = []
         self.write_untagged()
@@ -81,6 +91,9 @@ class Processor:
 
         folder_name = re.sub("Q[0-9]*", "", tags[0]) # should be same for all tags[i], i in range
         fname = self.names_counts[folder_name][0]
+        if self.course_code != "":
+            fname = "[{}] ".format(self.course_code) + fname
+
         
         write_csv(contents, self.out_folder+fname+".csv")
 
@@ -174,6 +187,8 @@ class Processor:
     def order(self):
         def orderer(fs):
             fs.sort(key=lambda f: f.i)
+            for f in fs:
+                f.questions.sort(key=lambda q:q.i)
         
         for f in self.folders:
             orderer(f.subfolders)
@@ -189,11 +204,24 @@ class Processor:
 
     ### IMPORT FROM FILE ###
     def is_nc_from_file(self):
+        if self.nc_from_file!=None:
+            return self.nc_from_file
         try:
             f = open(self.nc_fname, "r")
             c = len(f.readlines())
             f.close()
-            return c==(len(self.get_folders())+1)
+            if c==(len(self.get_folders())+1):
+                # looks like it's true
+                tmp = ""
+                while not (tmp in ["y", "n"]):
+                    tmp = input("Get names/counts from file? (y/n)").lower()
+                    if tmp=="y":
+                        return True
+                    if tmp=="n":
+                        return False
+                    utils.warning("Invalid input.\n")
+            else:
+                return False
         except:
             return False
 
@@ -215,19 +243,19 @@ class Processor:
 
 
     def mk_nc_from_file(self):
-        assert self.is_nc_from_file()
+        assert self.nc_from_file
         utils.instruction("Using data from file.")
         f_tags = [f.tag for f in self.get_folders()]
+
         f = open(self.nc_fname, "r")
         first = True
-        for line in f:
+        for tnc in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
             if first:
-                first=False
+                first = False
                 continue
 
-            tnc = line.strip().split(",")
             if not len(tnc)==3:
-                utils.exception("Invalid line: {}".format(line))
+                utils.exception("Line {} has {} elements.".format(tnc[0], len(tnc)))
             if not (tnc[0] in f_tags):
                 utils.exception("Invalid tag provided: {}".format(tnc[0]))
             if not(tnc[2].isdigit()):
@@ -238,6 +266,5 @@ class Processor:
                     tnc[1] = self.names_counts["F{}".format(utils.get_value(tnc[0], "F"))][0] + " → " + tnc[1]
                 except:
                     utils.exception("Subfolder {} named before parent folder.".format(tnc[0]))
-            self.names_counts[tnc[0]] = (tnc[1], int(tnc[2]))
-
+            self.names_counts[tnc[0]] = (replace_invalid_chars(tnc[1]), int(tnc[2]))
         f.close()
