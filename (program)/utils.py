@@ -10,8 +10,12 @@ def get_tag(title):
     if len(tag)==0:
         # print("No tag found for:", title)
         return None
-
-    assert len(tag)==1
+    if len(tag)!=1:
+        if len(set(tag))==1: # all elements in tags the same
+            # warning("Same tag appears multiple times in line: {}".format(title))
+            return tag[0]
+        else:
+            exception("Different tags appear in the same line: {}".format(title))
     return tag[0]
 
 # get("F2S4Q1", "S") --> 4
@@ -24,7 +28,8 @@ def get_value(tag, t, keys=["F", "S", "Q"]):
         print(full)
     if len(full)==0:
         return None
-    assert len(full)==1
+    if len(full)!=1:
+        exception("Tag ({}) formatted incorrectly".format(tag))
     return int(full[0][1:])
 
 
