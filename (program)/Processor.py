@@ -27,7 +27,7 @@ class Processor:
 
     ### NAMER ### 
     def get_names_counts(self, tag):
-        def name_unique(self, name): return not (name in [nc[0] for nc in self.names_counts.values()])
+        def name_unique(name): return not (name in [nc[0] for nc in self.names_counts.values()])
         
         full_name = ""
         count = -1
