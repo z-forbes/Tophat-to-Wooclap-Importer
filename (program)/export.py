@@ -1,39 +1,28 @@
-from os import remove, listdir
+from os import remove
+from utils import dir_fnames
 from shutil import rmtree
-import utils
-try:
-    rmtree("th_to_wc/node_modules")
-except:
-    utils.warning("node modules already deleted")
+from time import sleep
 
-try:
-    io_dirs = ["th_to_wc/input/", "th_to_wc/output/"]
-    for io in io_dirs:
-        for f in listdir(io):
-            remove(io+f)
-except:
-    utils.warning("to_to_wc io files already deleted")
+for fname in ["img_tol_miss.csv", "joined_input.csv", "data_import.csv", "tmp_validation_file.csv"]:
+    try:
+        remove(fname)
+    except:
+        print("{} already deleted.".format(fname))
 
-try:
-    out_dir = "output/"
-    for f in listdir(out_dir):
-        remove(out_dir+f)
-except:
-    utils.warning("output files already deleted")
+# remove dir and contents
+for dirname in ["__pycache__", "th_to_wc/node_modules"]:
+    try:
+        rmtree(dirname)
+    except:
+        print("{} already deleted.".format(dirname))
 
-try:
-    remove("img_tol_miss.csv")
-except:
-    utils.warning("img_tol_mis already deleted")
+# remove contents, keep empty dir
+for dirname in ["output/", "th_to_wc/input/", "th_to_wc/output/"]:
+    try:
+        for fname in dir_fnames(dirname):
+            remove(dirname+fname)
+    except:
+        print("{}'s contents already deleted.".format(dirname))
 
-try:
-    remove("data_import.csv")
-except:
-    utils.warning("data_import already deleted")
-
-try:
-    rmtree("__pycache__")
-except:
-    utils.warning("__pycache__ already deleted")
-
-input("Export complete.\nPress enter to exit.")
+print("\nExport complete.\nProgram will close shortly.")
+sleep(3)

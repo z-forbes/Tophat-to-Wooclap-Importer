@@ -5,7 +5,8 @@ import utils
 class Tophat:
     def __init__(self, th_dir):
         fnames = utils.dir_fnames(th_dir)
-        assert len(fnames)==1
+        if len(fnames)!=1:
+            utils.exception("{} input files provided. Only 1 can be provided at a time.".format(len(fnames)))
 
         self.th_headers = []
         self.lines = []
@@ -18,7 +19,7 @@ class Tophat:
                 return True
             if str=="FALSE" or str=="":
                 return False
-            raise Exception("String was: {}".format(str))
+            utils.exception("Not a boolean. String was {}".format(str))
             
         f = open(fname, 'r')
         first = True

@@ -22,12 +22,13 @@ class Processor:
 
         # key: folder/subfolder tag, value: (f/sf name, f/sf count)
         self.names_counts = {}
-        self.nc_from_file = None
         
         self.course_code = ""
 
     ### NAMER ### 
     def get_names_counts(self, tag):
+        def name_unique(self, name): return not (name in [nc[0] for nc in self.names_counts.values()])
+        
         full_name = ""
         count = -1
         if "S" in tag:
@@ -35,24 +36,23 @@ class Processor:
             full_name += self.names_counts[f_tag][0] + " → "
         name = "name_of_{}".format(tag)
         if not self.auto:
-            name = input("\nName of {}: ".format(pretty_tag(tag)))
-            while not self.name_unique(full_name+name):
+            while True:
+                name = input("\nName of {}: ".format(pretty_tag(tag)))
+                if name_unique(full_name+name): break
+
                 utils.warning("Name not unique.")
-                name = input("Name of {}: ".format(pretty_tag(tag)))
             
             extra = ""
             if not "S" in tag:
                 extra = ", excluding those within subfolder(s)"
-            count = input("No. of questions in {}{}: ".format(pretty_tag(tag), extra))
-            while not count.isdigit():
-                utils.warning("Enter a number.")
+            while True:
                 count = input("No. of questions in {}{}: ".format(pretty_tag(tag), extra))
+                if count.isdigit(): break
+
+                utils.warning("Enter a number.")
         
         full_name += name
         return (utils.replace_invalid_chars(full_name), int(count))
-        
-    def name_unique(self, name):
-        return not (name in [nc[0] for nc in self.names_counts.values()])
 
 
     ### OUTPUTTER ###
@@ -61,8 +61,7 @@ class Processor:
         if not self.auto:
             self.order()
 
-        self.nc_from_file = self.is_nc_from_file()
-        if self.nc_from_file:
+        if self.is_nc_from_file():
             self.mk_nc_from_file()
         else:
             self.mk_nc_not_from_file()
@@ -94,7 +93,6 @@ class Processor:
         if self.course_code != "":
             fname = "[{}] ".format(self.course_code) + fname
 
-        
         write_csv(contents, self.out_folder+fname+".csv")
 
     def write_untagged(self):
@@ -106,7 +104,10 @@ class Processor:
                 untagged=True
                 output.append(l)
         if untagged:
-            utils.write_csv(output, self.out_folder+"_untagged.csv")
+            fname = "untagged.csv"
+            if self.course_code != "":
+                fname = "[{}] {}".format(self.course_code, fname)
+            utils.write_csv(output, self.out_folder+"_"+fname)
 
 
 
@@ -126,7 +127,6 @@ class Processor:
     
     
     def mk_folders(self):
-        self.fodlers = []
         for tag, v in self.tags_rows.items():
             q = Question(get_value(tag, "Q"), v, tag)
             f_i = get_value(tag, "F")
@@ -204,8 +204,6 @@ class Processor:
 
     ### IMPORT FROM FILE ###
     def is_nc_from_file(self):
-        if self.nc_from_file!=None:
-            return self.nc_from_file
         try:
             f = open(self.nc_fname, "r")
             c = len(f.readlines())
@@ -243,7 +241,7 @@ class Processor:
 
 
     def mk_nc_from_file(self):
-        assert self.nc_from_file
+        # assert self.is_nc_from_file()
         utils.instruction("Using data from file.")
         f_tags = [f.tag for f in self.get_folders()]
 

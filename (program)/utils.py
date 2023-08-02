@@ -11,7 +11,7 @@ def get_tag(title):
         # print("No tag found for:", title)
         return None
     if len(tag)!=1:
-        if len(set(tag))==1: # all elements in tags the same
+        if len(set(tag))==1: # all elements in tag the same
             # warning("Same tag appears multiple times in line: {}".format(title))
             return tag[0]
         else:
@@ -24,8 +24,8 @@ def get_value(tag, t, keys=["F", "S", "Q"]):
     if not t in keys:
         return None
     full = re.findall("{}[0-9]*".format(t), tag)
-    if len(full)>1:
-        print(full)
+    # if len(full)>1:
+    #     print(full)
     if len(full)==0:
         return None
     if len(full)!=1:
@@ -51,10 +51,11 @@ def get_csv_headers(fname):
     f.close()
     return output
 
+# joins content from two csvs. no input validation. assumes they have the same headers, which are preserved.
 def join_csvs(dirname, outname):
     fnames = [f for f in listdir(dirname) if isfile(join(dirname, f))]
     if len(fnames)==0:
-        exception("NO INPUT FILES PROVIDED!!")
+        exception("No input files provided.")
     output = []
     first_file = True
     for fname in fnames:
@@ -67,27 +68,23 @@ def join_csvs(dirname, outname):
             output.append(line)
         if first_file:
             first_file = False
-        
-    with open(outname, 'w', newline='') as file:
-        mywriter = csv.writer(file, delimiter=',')
-        mywriter.writerows(output)
+    
+    write_csv(output, outname)
     return outname
 
+# contents is 2D array
 def write_csv(contents, fname):
-    # punctuation = r"""!"#$%&'()*+,-:;<=>?@\^`{|}~"""
-    # if any (p in fname for p in punctuation):
-    #     warning("Trying to write a file whose name contains punctuation. May cause unexpected behaviour.")
     with open(fname, 'w', newline='') as file:
         mywriter = csv.writer(file, delimiter=',')
         mywriter.writerows(contents)
 
+# gets all filenames from a directory 
 def dir_fnames(dirname):
     return [f for f in listdir(dirname) if isfile(join(dirname, f))]
 
-# i thought there were going to be more to replace lol
 def replace_invalid_chars(string):
     # subs = {old:new}
-    subs = {":":"[colon]"}
+    subs = {":":"[colon]"} # i thought there were going to be more then this rip
 
     for old, new in subs.items():
         string = string.replace(old, new)
@@ -96,6 +93,7 @@ def replace_invalid_chars(string):
     
 
 ### MESSAGES ###
+# terminates program
 def exception(message):
     print('\033[91m' + "\nError: {}\n".format(message) + '\033[0m')
     input("Press enter to exit.")
