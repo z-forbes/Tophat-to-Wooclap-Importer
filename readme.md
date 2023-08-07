@@ -1,4 +1,4 @@
-## [Download](https://github.com/lewisforbes/Tophat-to-Wooclap-Importer/archive/refs/heads/main.zip)
+# Tophat to Wooclap Importer ([download](https://github.com/lewisforbes/Tophat-to-Wooclap-Importer/archive/refs/heads/main.zip))
 
 This program allows for the Topat to Wooclap import process to be semi-automated. It runs on Windows. 
 The program contains files which cause destructive actions. As outlined in the [license](/LICENSE), I disclaim all liability.
