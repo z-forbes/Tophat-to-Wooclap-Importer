@@ -20,6 +20,8 @@ def get_tag(title):
 
 # get("F2S4Q1", "S") --> 4
 def get_value(tag, t, keys=["F", "S", "Q"]):
+    if tag==None:
+        return None
     t = t.upper()
     if not t in keys:
         return None
@@ -94,13 +96,26 @@ def replace_invalid_chars(string):
 
 ### MESSAGES ###
 # terminates program
-def exception(message):
-    print('\033[91m' + "\nError: {}\n".format(message) + '\033[0m')
+def exception(message, colour=True):
+    full = "\nError: {}\n".format(message)
+    if colour:
+        print('\n\033[91m' + full + '\033[0m')
+    else:
+        print(full)
+        
     input("Press enter to exit.")
-    raise Exception()
+    raise AssertionError()
 
-def warning(message):
-    print('\033[93m' + "{}".format(message) + '\033[0m')
+def warning(message, colour=True):
+    message = str(message)
+    if colour:
+        print('\033[93m' + message + '\033[0m')
+    else:
+        print(message)
 
-def instruction(message):
-    print('\033[96m' + "{}".format(message) + '\033[0m')
+def instruction(message, colour=True):
+    message = str(message)
+    if colour:
+        print('\033[96m' + message + '\033[0m')
+    else:
+        print(message)

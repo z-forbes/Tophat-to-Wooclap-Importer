@@ -3,10 +3,9 @@ import re
 import utils
 
 class Tophat:
-    def __init__(self, th_dir):
+    def __init__(self, th_dir, show_warnings=True):
+        self.show_warnings = show_warnings
         fnames = utils.dir_fnames(th_dir)
-        if len(fnames)!=1:
-            utils.exception("{} input files provided. Only 1 can be provided at a time.".format(len(fnames)))
 
         self.th_headers = []
         self.lines = []
@@ -43,7 +42,6 @@ class Tophat:
                     return r 
                 else:
                     return 0
-
             output.sort(key=lambda l: _get_value(l[0], "Q")) 
             output.sort(key=lambda l: _get_value(l[0], "S")) 
             output.sort(key=lambda l: _get_value(l[0], "F")) 
@@ -54,7 +52,10 @@ class Tophat:
             img_tol_miss = [l.has_img, l.has_tol, l.missing]
             if True in img_tol_miss:
                 tag = utils.get_tag(l.wc_q)
+                if tag==None:
+                    continue
                 to_write.append([tag] + img_tol_miss)
+        print(str(to_write).replace("],", "\n"))
         order_output(to_write)
         headers = ["tag", "has image", "has tolerance", "missing"]
         contents = [headers] + to_write
@@ -105,7 +106,8 @@ class Tophat:
                 sf_i=utils.get_value(tag, "S")
             f = wc.get_folder_i(f_i, sf_i)
             if len(f.questions)>nc[1]:
-                utils.warning("{} has {} questions - you said there were {}!".format(tag, len(f.questions), nc[1]))
+                if self.show_warnings:
+                    utils.warning("{} has {} questions - you said there were {}!".format(tag, len(f.questions), nc[1]))
                 continue
 
             if len(f.questions)==nc[1]:

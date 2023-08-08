@@ -1,10 +1,10 @@
-from main import main
+from main import Main
 import utils
 import os
 import csv
 from time import sleep
 
-# checks questions missing in output
+# checks if questions missing in output
 def validate():
     in_dir = "th_to_wc/input/"
     out_dir = "output/"
@@ -27,11 +27,21 @@ def validate():
     if lines_in==lines_out:
         utils.instruction("\nAll {} questions in input are accounted for accross outputs!".format(lines_in-1))
     else:
-        utils.exception("There are {} questions in input and {} accross outputs.".format(lines_in-1, lines_out-1))
+        utils.instruction("There are {} questions in input and {} accross outputs.\nThis is likely because of untagged questions".format(lines_in-1, lines_out-1))
+        input("Press enter to continue.")
 
-main(auto=False)
-utils.instruction("Finished")
-validate()
-os.startfile("img_tol_miss.csv")
-print("Exiting shortly...")
-sleep(3)
+
+try:
+    f = open("logo.txt", "r")
+    print(f.read(), end="\n\n")
+    f.close()
+    Main(auto=False).main()
+    validate()
+    utils.instruction("Finished")
+    os.startfile("img_tol_miss.csv")
+    print("Exiting shortly...")
+    sleep(3)
+except Exception as e:
+    if type(e)!=AssertionError:
+        print("The program crashed unexpectedly with the following error message...")
+        utils.exception(e)
