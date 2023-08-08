@@ -3,7 +3,7 @@
 This program allows for the Topat to Wooclap import process to be semi-automated. It runs on Windows. 
 The program contains files which cause destructive actions. As outlined in the [license](/LICENSE), I disclaim all liability.
 
-All contents of the [th_to_wc directory](/(program)/th_to_wc) were written by [Tophat](https://tophat.com/). The rest of the program was written as part of my work at the [ISG](https://www.ed.ac.uk/information-services). 
+All contents of the [th_to_wc directory](/(program)/th_to_wc) were written by [Wooclap](https://wooclap.com/). The rest of the program was written as part of my work at the [ISG](https://www.ed.ac.uk/information-services). 
 
 1. Receive access to the Tophat course in question. 
 2. Tag questions in the course, see figure 1. Follow these rules: 
