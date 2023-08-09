@@ -55,7 +55,7 @@ class Tophat:
                 if tag==None:
                     continue
                 to_write.append([tag] + img_tol_miss)
-        print(str(to_write).replace("],", "\n"))
+                
         order_output(to_write)
         headers = ["tag", "has image", "has tolerance", "missing"]
         contents = [headers] + to_write

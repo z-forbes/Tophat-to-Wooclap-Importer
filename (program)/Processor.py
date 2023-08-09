@@ -1,6 +1,7 @@
 import csv
 from Folder import *
 from utils import *
+import os
 
 class Processor:
     def __init__(self, wc_dir, auto=False):           
@@ -89,6 +90,12 @@ class Processor:
             contents.append(current)
 
         folder_name = re.sub("Q[0-9]*", "", tags[0]) # should be same for all tags[i], i in range
+        if not folder_name in self.names_counts.keys():
+            try:
+                os.startfile("data_import.csv")
+            except:
+                pass
+            utils.exception("The folder {} was found in input but not in provided folder names.".format(folder_name)) 
         fname = self.names_counts[folder_name][0]
         if self.course_code != "":
             fname = "[{}] ".format(self.course_code) + fname
@@ -212,7 +219,7 @@ class Processor:
                 # looks like it's true
                 tmp = ""
                 while not (tmp in ["y", "n"]):
-                    tmp = input("Get names/counts from file? (y/n)").lower()
+                    tmp = input("\nGet names/counts from file? (y/n)").lower()
                     if tmp=="y":
                         return True
                     if tmp=="n":
@@ -247,16 +254,38 @@ class Processor:
 
         f = open(self.nc_fname, "r")
         first = True
+        tags = []
         for tnc in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
             if first:
                 first = False
                 continue
+            
+            if csv_line_blank(tnc):
+                continue
+
+            tags.append(tnc[0])
 
             if not len(tnc)==3:
                 utils.exception("Line {} has {} elements.".format(tnc[0], len(tnc)))
+            
             if not (tnc[0] in f_tags):
+                if str_blank(tnc[0]):
+                    tnc[0] = "[empty tag]"
+                
+                try:
+                    os.startfile("data_import.csv")
+                except:
+                    pass
                 utils.exception("Invalid tag provided: {}".format(tnc[0]))
+            
             if not(tnc[2].isdigit()):
+                if str_blank(tnc[2]):
+                    tnc[2] = "[empty count]"
+
+                try:
+                    os.startfile("data_import.csv")
+                except:
+                    pass
                 utils.exception("Invalid count provided: {}".format(tnc[2]))
 
             if "S" in tnc[0]:
@@ -265,4 +294,14 @@ class Processor:
                 except:
                     utils.exception("Subfolder {} named before parent folder.".format(tnc[0]))
             self.names_counts[tnc[0]] = (replace_invalid_chars(tnc[1]), int(tnc[2]))
+        
+        tags_count = {t:tags.count(t) for t in tags}
+        problem = ""
+        for t, c in tags_count.items():
+            if c!=1:
+                problem+="The tag {} is not unique. It appears {} times.\n".format(t, c)
+        if problem!= "":
+            os.startfile("data_import.csv")
+            utils.exception("Fix the following problems with tags from file:\n"+problem)
+
         f.close()

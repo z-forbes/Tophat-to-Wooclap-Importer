@@ -119,3 +119,15 @@ def instruction(message, colour=True):
         print('\033[96m' + message + '\033[0m')
     else:
         print(message)
+
+
+### OTHER ###
+# checks if string is blank
+def str_blank(s):
+    return s==None or s=="" or s.replace(" ", "")==""
+
+def csv_line_blank(l):
+    if l==None or len(l)==0:
+        return True 
+
+    return not False in [str_blank(str(e)) for e in l]

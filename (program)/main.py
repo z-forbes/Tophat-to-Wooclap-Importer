@@ -16,8 +16,8 @@ class Main:
     # checks for duplicate tags    
     def verify_tags(self):
         tags = []
-
-        f = open(self.th_dir+utils.dir_fnames(self.th_dir)[0], "r")
+        th_fpath = self.th_dir+utils.dir_fnames(self.th_dir)[0]
+        f = open(th_fpath, "r")
         first = True
         for line in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
             if first:
@@ -31,11 +31,17 @@ class Main:
         problem = ""
         for t, c in tags_count.items():
             if t==None:
-                utils.warning("For your information, {} questions are untagged.".format(c), colour=False)
+                ok_lol = "questions are"
+                if c==1:
+                    ok_lol = "question is"
+                if c*2==len(tags):
+                    utils.warning("Exactly half of all questions are untagged.", colour=False)
+                utils.warning("For your information, {} {} untagged. There are {} questions total.".format(c, ok_lol, len(tags)), colour=False)
                 continue
             if c!=1:
                 problem+="The tag {} is not unique. It appears {} times.\n".format(t, c)
         if problem !="":
+            os.startfile(th_fpath.replace("/", "\\"))
             utils.exception(problem+"You must remove duplicate tags to continue.\nEither choose a unique tag, or remove tag completely.", colour=False)
                 
 
@@ -77,6 +83,9 @@ class Main:
                 
                 if rm_fst_col:
                     line = line[1:]
+
+                line[3] = line[3].replace("\n<br>", "") # tag not removed by Wooclap's code
+                line[3] = line[3].replace("<br>", "") # cba using regex
                 output.append(line)
             f.close()
 

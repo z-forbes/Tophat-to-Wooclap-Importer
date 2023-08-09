@@ -16,7 +16,7 @@ try:
     startfile(import_path)
 except Exception as e:
     if type(e)==PermissionError:
-        utils.exception(e)
+        utils.exception(e, colour=False)
     if type(e)!=AssertionError:
         print("The program crashed unexpectedly with the following error message...")
-        utils.exception(e)
+        utils.exception(e, colour=False)

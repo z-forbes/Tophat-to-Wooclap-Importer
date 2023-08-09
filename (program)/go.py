@@ -39,9 +39,10 @@ try:
     validate()
     utils.instruction("Finished")
     os.startfile("img_tol_miss.csv")
-    print("Exiting shortly...")
-    sleep(3)
+    input("Press enter to exit.")
 except Exception as e:
+    if type(e)==PermissionError:
+        utils.exception("Close the file mentioned in the following error message:\n"+str(e))
     if type(e)!=AssertionError:
         print("The program crashed unexpectedly with the following error message...")
         utils.exception(e)
