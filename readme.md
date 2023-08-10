@@ -15,7 +15,7 @@ All contents of the [th_to_wc directory](/(program)/th_to_wc) were written by [W
 5. Download this repo.
 6. Follow the steps outlined. If warnings cannot be ignored, see table below.
    1. Run ``1. move tophat file here``. Place your Tophat extract in the folder opened. 
-   2. Run ``2. [optional] import foler names`` if you want to import folder names/counts from a file. 
+   2. Run ``2. [optional] import folder names`` if you want to import folder names/counts from a file. 
    3. Run ``3. run me.``
    4. If step ii. was skipped, name the folders and subfolders based on the Tophat names. All folders and folder -> subfolder paths must be uniquely named.
    5. Click ``4. files to import``. This opens a folder containing files to import to Wooclap. Each file represents one event.
