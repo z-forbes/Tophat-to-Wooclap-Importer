@@ -60,32 +60,6 @@ class Tophat:
         headers = ["tag", "has image", "has tolerance", "missing"]
         contents = [headers] + to_write
         utils.write_csv(contents, outname)
-        
-    # # orders to_write based on tags. adds tags where they're missing
-    # def order_populate(self, to_write):
-    #     def fs_match(t1, t2):
-    #         concat = t1+t2
-    #         output = True
-    #         if concat.count("S")==1:
-    #             return False
-    #         if concat.count("S")==2:
-    #                 output = output and (utils.get_value(t1, "S")==utils.get_value(t2, "S"))
-    #         return output and (utils.get_value(t1, "F")==utils.get_value(t2, "F"))
-        
-    #     if len(to_write)<=1:
-    #         return
-        
-    #     to_write.sort(key = lambda x:x[0])
-    #     prev = to_write[0]
-    #     for cur in to_write[1:]:
-    #         if fs_match(prev[0], cur[0]):
-    #             new_qs = [utils.get_value(prev[0], "Q")+1, utils.get_value(cur[0], "Q")]
-    #             for nq in new_qs:
-    #                 new_tag = "F{}S{}Q{}".format(utils.get_value(prev[0], "F"), utils.get_value(prev[0], "S"), nq)
-    #                 to_write.append([new_tag, None, None, True])
-    #     to_write.sort(key = lambda x:x[0])
-    #     return to_write
-    
 
     def mk_missing(self, wc):
         wc_qs = wc.get_all_qs()
@@ -127,17 +101,10 @@ class Tophat:
 
         for l in self.lines:
             l.missing = l.tag in self.missing
-    
-
-
-
-        
-
 
     def is_line(self, tag):
         return tag in [l.tag for l in self.lines]
     
-
 
 class Line:
     def __init__(self, full, th_q, has_img, has_tol):

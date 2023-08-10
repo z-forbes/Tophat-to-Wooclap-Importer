@@ -1,7 +1,15 @@
 from os import remove
-from utils import dir_fnames
+from utils import dir_fnames, my_input
 from shutil import rmtree
 from time import sleep
+
+reset = "r"
+while True:
+    user_in = my_input("Enter {} to reset.".format(reset))
+    if user_in.lower()==reset:
+        break
+    else:
+        print("Invalid input.")
 
 for fname in ["img_tol_miss.csv", "joined_input.csv", "data_import.csv", "tmp_validation_file.csv"]:
     try:
