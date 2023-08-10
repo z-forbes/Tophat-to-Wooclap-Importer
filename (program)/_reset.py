@@ -24,5 +24,5 @@ for dirname in ["output/", "th_to_wc/input/", "th_to_wc/output/"]:
     except:
         print("{}'s contents already deleted.".format(dirname))
 
-print("\nExport complete.\nProgram will close shortly.")
+print("\nReset complete.\nProgram will close shortly.")
 sleep(3)

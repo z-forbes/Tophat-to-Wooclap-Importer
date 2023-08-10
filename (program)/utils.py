@@ -131,3 +131,6 @@ def csv_line_blank(l):
         return True 
 
     return not False in [str_blank(str(e)) for e in l]
+
+def my_input(q):
+    return input("{}\n> ".format(q))

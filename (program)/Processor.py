@@ -38,7 +38,7 @@ class Processor:
         name = "name_of_{}".format(tag)
         if not self.auto:
             while True:
-                name = input("\nName of {}: ".format(pretty_tag(tag)))
+                name = my_input("\nName of {}: ".format(pretty_tag(tag)))
                 if name_unique(full_name+name): break
 
                 utils.warning("Name not unique.")
@@ -47,7 +47,7 @@ class Processor:
             if not "S" in tag:
                 extra = ", excluding those within subfolder(s)"
             while True:
-                count = input("No. of questions in {}{}: ".format(pretty_tag(tag), extra))
+                count = my_input("No. of questions in {}{}: ".format(pretty_tag(tag), extra))
                 if count.isdigit(): break
 
                 utils.warning("Enter a number.")
@@ -70,7 +70,7 @@ class Processor:
         self.reset_output()
         self.mk_lines()
         if not self.auto:
-            self.course_code = input("Enter the course code (or leave blank to skip): ")
+            self.course_code = my_input("Enter the course code (or leave blank to skip): ")
         for f in self.folders:
             if len(f.subfolders)!=0:
                 for sf in f.subfolders:
@@ -219,7 +219,7 @@ class Processor:
                 # looks like it's true
                 tmp = ""
                 while not (tmp in ["y", "n"]):
-                    tmp = input("\nGet names/counts from file? (y/n)").lower()
+                    tmp = my_input("\nGet names/counts from file? (y/n)").lower()
                     if tmp=="y":
                         return True
                     if tmp=="n":

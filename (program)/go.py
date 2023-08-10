@@ -32,6 +32,7 @@ def validate():
 
 
 try:
+    os.system('cls')
     f = open("logo.txt", "r")
     print(f.read(), end="\n\n")
     f.close()
