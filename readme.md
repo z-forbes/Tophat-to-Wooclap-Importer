@@ -22,7 +22,7 @@ All contents of the [th_to_wc directory](/(program)/th_to_wc) were written by [W
    6. The file automatically opened (``img_tol_miss.csv``) tells you of any questions which need to be created/updated manually. 
 7. Import the files into Wooclap from the folder opened in step 6v. The filenames in this directory represent one event. 
 
-Although this should not be necessary, running (program)/export.py is the same as turning everything off and on again.  
+Although this should not be necessary, running (program)/_reset.py is the same as turning everything off and on again.  
 
 | File                              | Alternative                              |
 |-----------------------------------|------------------------------------------|
