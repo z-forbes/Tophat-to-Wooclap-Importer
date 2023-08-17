@@ -8,6 +8,7 @@ import utils
 
 class Main:
     def __init__(self, auto):
+        utils.remove_placeholders()
         self.last_good_line = None
         self.auto = auto
         self.th_dir = "th_to_wc/input/"

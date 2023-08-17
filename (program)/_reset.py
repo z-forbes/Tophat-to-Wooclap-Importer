@@ -1,5 +1,5 @@
-from os import remove
-from utils import dir_fnames, my_input
+from os import remove, mkdir
+from utils import dir_fnames, my_input, add_placeholder
 from shutil import rmtree
 from time import sleep
 
@@ -18,19 +18,28 @@ for fname in ["img_tol_miss.csv", "joined_input.csv", "data_import.csv", "tmp_va
         print("{} already deleted.".format(fname))
 
 # remove dir and contents
-for dirname in ["__pycache__", "th_to_wc/node_modules"]:
+for dirname in ["__pycache__", "th_to_wc/node_modules"]+["output/", "th_to_wc/input/", "th_to_wc/output/"]:
     try:
         rmtree(dirname)
     except:
         print("{} already deleted.".format(dirname))
 
 # remove contents, keep empty dir
-for dirname in ["output/", "th_to_wc/input/", "th_to_wc/output/"]:
+for dirname in []:
     try:
         for fname in dir_fnames(dirname):
             remove(dirname+fname)
     except:
         print("{}'s contents already deleted.".format(dirname))
+
+# make empty dir with placeholder
+for dirname in ["output/", "th_to_wc/input/", "th_to_wc/output/"]:
+    try:
+        mkdir(dirname)
+        add_placeholder(dirname)
+    except:
+        print("Unable to make folder and add placeholder for: {}.".format(dirname))
+
 
 print("\nReset complete.\nProgram will close shortly.")
 sleep(3)

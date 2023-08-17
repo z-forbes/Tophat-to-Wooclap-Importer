@@ -92,7 +92,18 @@ def replace_invalid_chars(string):
         string = string.replace(old, new)
     
     return string
-    
+
+def add_placeholder(dirname):
+    f = open(dirname+"placeholder", "w")
+    f.write("This is a placeholder. It can be deleted.")
+    f.close()
+
+def remove_placeholders(dirnames=["output/", "th_to_wc/input/", "th_to_wc/output/"]):
+    for dirname in dirnames:
+        try:
+            remove(dirname+"placeholder")
+        except:
+            pass
 
 ### MESSAGES ###
 # terminates program
@@ -134,3 +145,4 @@ def csv_line_blank(l):
 
 def my_input(q):
     return input("{}\n> ".format(q))
+
