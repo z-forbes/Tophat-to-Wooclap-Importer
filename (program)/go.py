@@ -27,7 +27,7 @@ def validate():
     if lines_in==lines_out:
         utils.instruction("\nAll {} questions in input are accounted for accross outputs!".format(lines_in-1))
     else:
-        utils.instruction("There are {} questions in input and {} accross outputs.\nThis is likely because of untagged questions".format(lines_in-1, lines_out-1))
+        utils.instruction("There are {} questions in input and {} accross outputs.\nThis is likely because of Top Hat question types which Wooclap can't...\n...convert (learningtool and clickontargetquestion) for example. ".format(lines_in-1, lines_out-1))
         input("Press enter to continue.")
 
 
