@@ -18,7 +18,7 @@ class Main:
     def verify_tags(self):
         tags = []
         th_fpath = self.th_dir+utils.dir_fnames(self.th_dir)[0]
-        f = open(th_fpath, "r")
+        f = open(th_fpath, "r", errors='ignore')
         first = True
         for line in csv.reader(f, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True):
             if first:
@@ -54,7 +54,7 @@ class Main:
         for fname in utils.dir_fnames(self.th_dir): # shouldn't be a for loop - assured only one file.
             if fname.split(".")[-1]!="csv":
                 exception("Format of input file must be csv")
-            f = open(self.th_dir+fname, "r")
+            f = open(self.th_dir+fname, "r", errors='ignore')
             output = []
             first = True
             rm_fst_col = False
